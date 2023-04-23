@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from ctypes import CFUNCTYPE
 import sys 
+import json
 
 file1path = sys.argv[1]
 file2path = sys.argv[2]
-district = sys.argv[3]
-area = sys.argv[4]
-diesel = sys.argv[5]
+# district = sys.argv[3]
+file3path = sys.argv[3]
 
-def calculate_onsite_emission(file1path, file2path,district,area,diesel):
+def calculate_onsite_emission(file1path, file2path,file3path):
 
         #unit capital cost of each system
     C = {"Solar":3000, "BESS":1500, "HVO":1}       # $/kW,  $/Kwh
@@ -25,12 +25,12 @@ def calculate_onsite_emission(file1path, file2path,district,area,diesel):
     # 1kWh = 3.6 MJ
     Rs_USD = 320    # 1 USD = 320 LKR
         # Read input files
-    GridEF_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\files\Marginal Emission Factors.xlsx")
+    GridEF_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Marginal Emission Factors.xlsx")
     Elec_df = pd.read_excel(file1path)
-    dis = district.strip()
-    dis = district.capitalize()
+    # dis = district.strip()
+    # dis = district.capitalize()
 
-    Solar1kWp_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\files\Monthly district solar average for 1kWp in kWh.xlsx",sheet_name = dis)
+    #Solar1kWp_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Monthly district solar average for 1kWp in kWh.xlsx",sheet_name = dis)
 
     # N_build = int(buildings.strip())
     # roof_sizes=[];
@@ -38,11 +38,12 @@ def calculate_onsite_emission(file1path, file2path,district,area,diesel):
     #     L = float(input("Building -%i, roof length(m): " %(i+1)).strip())
     #     W = float(input("Building -%i, roof width(m): " %(i+1)).strip())
     #     roof_sizes.append([L,W])
-    roof_area = float(area.strip()) #m^2
+    #roof_area = float(area.strip()) #m^2
 
-    diesel_consump = float(diesel)
+    
 
     Steam_demand = pd.read_excel(file2path)
+    diesel_consump = pd.read_excel(file3path)
 
 
     col_names=list(range(48))
@@ -61,62 +62,17 @@ def calculate_onsite_emission(file1path, file2path,district,area,diesel):
     Grid_EM_df = New_GridEF_df.multiply(New_Elec_df) #quater hourly emission in kgCO2e
 
     Grid_EM = Grid_EM_df.sum().sum() #Total Grid emission for the year
-    # Return grid emissions as string
-    
 
-    col_names=list(range(24))
-    EmReductionSolar1kW_df = pd.DataFrame(columns = col_names)
-    m1 = 4  #time interval changing factor (1/4h to 1h)
-    cols = 24 #for hourly data
-
-    for i in range(cols):
-        EmReductionSolar1kW_df.iloc[:,i] = GridEF_df.iloc[:,m1*i:m1*i+m1].mean(axis=1)#take average of adjacent groups of 4 columns
-
-    EmReductionSolar1kW_df = EmReductionSolar1kW_df - EF["Solar"]
-
-    #Find the days for each month and multiply net emission factor by solar generation for each month
-    year = 2021
-    for i in range(365):
-        date_object = dt.date(year, 1, 1) + dt.timedelta(i)
-        month_number = date_object.month # get the month number from the datetime object
-        EmReductionSolar1kW_df.iloc[i,:] = (EmReductionSolar1kW_df.iloc[i,:].multiply(Solar1kWp_df.iloc[:24,month_number].T))/1000 
-        #for each day for each hour (gridEF-solarEF)xHourlySolarGeneration
-        #/1000 -> Wh generation data to kWh
-        # 
-    EmReductionSolar1kW = EmReductionSolar1kW_df.sum().sum()
-
-
-    # panel_sum = 0
-    # l = 2.015   #m      panel length
-    # w = 0.996  #m      panel width
-    # panel_cap = 410 #wp
-    # #number of panels required
-    # for i in roof_sizes:
-    #     L = i[0]        #roof length
-    #     W = i[1]        #roof width
-
-    #     c1 = 0.5        #clearence between 8x8 panel sets for both directions
-    #     c2 = 0.02       #clearence between two panels in the width direction (for T clamps)
-    #     columns = int(8*(L-c1)/(8*l + c1))
-    #     rows = int(8*(W-c1)/(8*(w + c2) + c1))
-    #     panel_sum += columns * rows
-
-    l = 2.279   #m      panel length
-    w = 1.134  #m      panel width
-    panel_cap = 550 #wp
-
-    panel_sum = roof_area//(l*w)
-    max_DC_capacity = panel_sum * panel_cap/1000 #kW
 
 
     # Req_battery_cap = (Consump_dis.max())/DoD/eff 
     diesel_CV = 36.9  #MJ/l
     HVO_CV = 34.4     #MJ/l
-    diesel_emission = EF["Diesel"] * diesel_consump
+    diesel_emission = EF["Diesel"] * diesel_consump.iloc[:12,1].sum()
 
     #if totally replaced by HVO
-    Annual_HVO_req = diesel_consump * diesel_CV / HVO_CV    #liters
-    HVO_emission = Annual_HVO_req * EF["HVO"]
+    # Annual_HVO_req = diesel_consump * diesel_CV / HVO_CV    #liters
+    # HVO_emission = Annual_HVO_req * EF["HVO"]
 
     Steam_kg_TO_kwh = 0.7147
 
@@ -138,16 +94,24 @@ def calculate_onsite_emission(file1path, file2path,district,area,diesel):
     Steam_kWh = Steam_demand["Steam (kg)"].sum() * Steam_kg_TO_kwh
     Fuel_oil_EM = Steam_kWh /eff_oil * EF["Fuel oil"]
 
-    #if Fuel oil boiler is totally replaced bt biomass
-    Biomass_Boi_size = Steam_demand["Steam (kg)"].max()
+    # #if Fuel oil boiler is totally replaced bt biomass
+    # Biomass_Boi_size = Steam_demand["Steam (kg)"].max()
 
-    Biomass_EM = Steam_kWh * EF["Wood"]*3.6/(Cal_wood * eff_bio)
+    # Biomass_EM = Steam_kWh * EF["Wood"]*3.6/(Cal_wood * eff_bio)
 
     Total_EM = Grid_EM + diesel_emission + Fuel_oil_EM
-    return Total_EM
+    #return Grid_EM,diesel_emission,Fuel_oil_EM,Total_EM
+
+    
+    return json.dumps({
+        'Grid_EM': round(Grid_EM,2),
+        'diesel_emission': round(diesel_emission,2),
+        'Fuel_oil_EM': round(Fuel_oil_EM,2),
+        'Total_EM': round(Total_EM,2)
+    })
 
 
-Total_EM = calculate_onsite_emission(file1path, file2path, district, area, diesel)
+# Grid_EM , diesel_emission , Fuel_oil_EM,Total_EM = calculate_onsite_emission(file1path, file2path, district, area, diesel)
+em_output=calculate_onsite_emission(file1path, file2path, file3path)
+print(em_output)
 
-
-print(Total_EM)

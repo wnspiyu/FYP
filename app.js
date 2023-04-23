@@ -82,20 +82,6 @@ const pythonScriptPath = path.join(__dirname,'test.py');
 const args = [file1path, file2path, district, area, diesel];
 const pythonProcess = spawn('python', [pythonScriptPath, ...args]);
 
-// const pythonScript = spawn('python', ["C:/FYP/myNode/test.py", file1Path, file2Path,district,area,diesel]);
-
-// pythonScript.stdout.on('data', (data) => {
-//   console.log(`${data}`);
-// });
-
-// pythonScript.stderr.on('data', (data) => {
-//   console.error(`stderr: ${data}`);
-// });
-
-// pythonScript.on('close', (code) => {
-//   console.log(`child process exited with code ${code}`);
-//   rl.close();
-// });
 pythonProcess.stdout.on('data', (data) => {
   // console.log(${data});
   console.log(data.toString());
