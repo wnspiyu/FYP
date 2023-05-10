@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import '../../App.css'
-
+//import { Bar } from 'react-chartjs-2';
+//import { Chart } from 'chart.js/auto';
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { Heading } from '@chakra-ui/react'
+// import BarChart from  './barchart';
+
 
 import {
   FormControl,
@@ -70,7 +73,7 @@ function App() {
   for (let i = 0; i < numBuildings; i++) {
     buildingInputs.push(
       <div key={i}>
-        <center><h5>Building {i + 1} dimensions:</h5></center>
+        <center><h5>Building {i + 1} Rooftop Dimensions:</h5></center>
         <FormControl>
           <FormLabel>Width (m):</FormLabel>
           <Input type="number" name="width" value={buildingDimensions[i].width} onChange={(event) => handleWidthChange(event, i)} />
@@ -119,6 +122,7 @@ function App() {
     formData1.append('dimensionsArray', JSON.stringify(dimensionsArray));
     formData1.append('district', district);
     formData1.append('Total_EM', responseData.data.Total_EM);
+    setLoading(true);
     fetch('http://localhost:3100/optimize', {
       method: 'POST',
       body: formData1,
@@ -127,10 +131,50 @@ function App() {
       .then((data1) => {
         console.log(data1);
         setResponseData1(data1);
+        setLoading(false);
 
       })
       .catch((error) => console.error(error));
   };
+
+  ////////////////
+
+  // Chart.register({
+  //   id: 'category',
+  //   afterBuildTicks: function(chart) {
+  //       chart.ticks = chart.data.labels;
+  //       return;
+  //   }
+  // });
+
+  // const graphData = {
+  //   labels: ['A', 'B', 'C', 'D', 'E'],
+  //   datasets: [
+  //       {
+  //           label: 'My Data',
+  //           data: [1, 2, 3, 4, 5],
+  //           backgroundColor: 'rgba(255, 99, 132, 0.2)',
+  //           borderColor: 'rgba(255, 99, 132, 1)',
+  //           borderWidth: 1,
+  //       },
+  //   ],
+  // };
+
+  // const options = {
+  //   scales: {
+  //       y: {
+  //           beginAtZero: true,
+  //       },
+  //       x: {
+  //           type: 'category', // use the registered "category" scale here
+  //           display: true,
+  //           title: {
+  //               display: true,
+  //               text: 'My Categories',
+  //           },
+  //       },
+  //   },
+  // };
 
   return (
     <div style={{backgroundColor: "white", height: "100vh"}}>
@@ -151,17 +195,17 @@ function App() {
 
 
             <FormControl pb={3}>
-              <FormLabel style={{fontSize:"20px"}} htmlFor='email'>Electricity consumption</FormLabel>
+              <FormLabel style={{fontSize:"20px"}} htmlFor='email'>Annual Electricity consumption</FormLabel>
               <input type="file" name="file1" onChange={handleFileChange} />
             </FormControl>
 
             <FormControl pb={3}>
-              <FormLabel htmlFor='email'>Boiler consumption</FormLabel>
+              <FormLabel style={{fontSize:"20px"}} htmlFor='email'>Annual Boiler consumption</FormLabel>
               <input type="file" name="file2" onChange={handleFileChange} />
             </FormControl>
 
             <FormControl>
-              <FormLabel htmlFor='email'>Annual Diesel Consumption(l)</FormLabel>
+              <FormLabel style={{fontSize:"20px"}} htmlFor='email'>Annual Diesel Consumption</FormLabel>
               <input type="file" name="diesel" onChange={handleFileChange} />
             </FormControl>
 
@@ -172,21 +216,24 @@ function App() {
           <div className="card">
             {responseData &&
               <>
-                <center><h3>GHG Emission for Current System</h3></center>
+                <center><h2>GHG Emission for the Current System</h2></center>
                 <center><p>Grid Emission: {responseData.data.Grid_EM}kgCO2e</p></center>
                 <center><p>Diesel Emission: {responseData.data.diesel_emission}kgCO2e</p></center>
                 <center><p>Boiler Emission: {responseData.data.Fuel_oil_EM}kgCO2e</p></center>
                 <center><p>Total Emission: {responseData.data.Total_EM}kgCO2e</p></center><br></br>
+                {/* <BarChart/> */}
+                {/* <Bar data={graphData} options={options} canvasClassName="chart-canvas" /> */}
                 <center><p>We can help you to reduce your current onsite emission by using low carbon energy sources.Please set your emission target(kgCO2e)</p></center>
                 <center><input type="text" name="target" onChange={handleTarget} /></center>
                 <FormControl>
-                  <FormLabel htmlFor='email'>Number of Buildings:</FormLabel>
+                  <FormLabel style={{fontSize:"15px"}} htmlFor='email'>Number of Buildings:</FormLabel>
                   <Input type="number" name="numBuildings" onChange={handleNumBuildingsChange} />
+                  <center>{buildingInputs}</center><br></br>
                 </FormControl>
-                <center>{buildingInputs}</center><br></br>
+                
                 <center><label>District:</label></center>
                 <center><input type="text" name="district" onChange={handleDistrictChange} /></center><br></br>
-                <center><button type="button" onClick={handleUpload1}>Optimize the Current System</button></center>
+                <center><Button isLoading={loading} style={{ float: "right" }} type="button" onClick={handleUpload1} colorScheme='orange'>Optimize the Current System</Button></center>
                 <p></p><br></br>
                 <p></p>
               </>
@@ -207,7 +254,7 @@ function App() {
                 <center><p>Battery Capacity:{responseData1.data1.Battery_Capacity}</p></center>
                 <center><p>Annual_HVO fuel requirement:{responseData1.data1.Annual_HVO_fuel_requirement}</p></center>
                 <center><p>Biomass Boiler Capacity:{responseData1.data1.Biomass_Boiler_Capacity}</p></center>
-                <center><p></p></center>
+                <center><p></p></center><br></br>
                 <center><h5>Solar System Sizing</h5></center>
                 <center><p>PV system capacity:{responseData1.data1.PV_system_capacity}</p></center>
                 <center><p>PV system generated energy:{responseData1.data1.PV_system_generated_energy}</p></center>
@@ -216,14 +263,14 @@ function App() {
                 <center><p>No. of 60kW inverters:{responseData1.data1.No_of_60kW_inverters}</p></center>
                 <center><p>Maximum number of panel for a string:{responseData1.data1.Maximum_number_of_panel_for_a_string}</p></center>
                 <center><p>Minimum number of panel for a string:{responseData1.data1.Minimum_number_of_panel_for_a_string}</p></center>
-                <center><p></p></center>
+                <center><p></p></center><br></br>
                 <center><h5>BESS Sizing</h5></center>
                 <center><p>BESS Voltage:{responseData1.data1.BESS_Voltage}</p></center>
                 <center><p>No of batteries in Series per string:{responseData1.data1.No_of_batteries_in_Series_per_string}</p></center>
                 <center><p>No of strings in parallel:{responseData1.data1.No_of_strings_in_parallel}</p></center>
                 <center><p>Battery Bank Capacity:{responseData1.data1.Battery_Bank_Capacity}</p></center>
-                <center><p></p></center>
-                <center><h5>For Suggested System</h5></center>
+                <center><p></p></center><br></br>
+                <center><h5>For the Suggested System</h5></center>
                 <center><p>Net Present Value:{responseData1.data1.NPV}</p></center>
                 <center><p>New Emission:{responseData1.data1.New_Emission}</p></center>
                 <center><p>Capital cost of the overall energy system:{responseData1.data1.Capital_cost_of_the_overall_energy_system}</p></center>
