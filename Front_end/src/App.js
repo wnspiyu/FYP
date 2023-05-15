@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 
-import LandingPage from './components/pages/LandingPage'
+//import LandingPage from './components/pages/LandingPage'
 import LandingPageNew from './components/pages/LandingPageNew'
 import LoginPage from './components/pages/LoginPage'
 import RegisterPage from './components/pages/RegisterPage'

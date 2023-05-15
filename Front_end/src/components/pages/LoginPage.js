@@ -15,17 +15,17 @@ export default function SignInPage() {
                     </p>
                     <p>
                         <label>Password</label>
-                        <Link to="/forget-password"><label className="right-label">Forget password?</label></Link>
-                        <br />
                         <input type="password" name="password" required />
+                        <Link to="/forget-password"><label className="left-label">Forget password?</label></Link>
+                        {/* <br /> */}
                     </p>
                     <p>
-                        <button id="sub_btn" type="submit">Login</button>
+                    <center><button id="sub_btn" type="submit"style={{ width: "200px" }}>Login</button></center>
                     </p>
                 </form>
                 <footer>
-                    <p>First time? <Link to="/register">Create an account</Link>.</p>
-                    <p><Link to="/">Back to Homepage</Link>.</p>
+                    <p style={{ fontSize: "15px" }}>First time? <Link to="/register">Create an account</Link>.</p>
+                    <p style={{ fontSize: "15px" }}><Link to="/">Back to Homepage</Link>.</p>
                 </footer>
             </div>
         </div>

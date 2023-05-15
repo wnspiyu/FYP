@@ -47,6 +47,9 @@ app.post('/upload', (req, res) => {
     }
 
     const files = req.files;
+    const buildings = req.body.numBuildings;
+    const dimensions = req.body.dimensionsArray;
+    const district = req.body.district;
     
 
     // const workbook1 = xlsx.readFile(files[0].path);
@@ -61,15 +64,9 @@ app.post('/upload', (req, res) => {
     const file2path = files[1].path;
     const file3path = files[2].path;
 
-    // console.log(file1path);
-    // console.log(file2path);
-    // console.log(file3path);
-    // console.log(district);
-    // console.log(buildings);
-    // console.log(dimensions);
     
     const pythonScriptPath = path.join(__dirname,'test.py');
-    const args = [file1path, file2path, file3path];
+    const args = [file1path, file2path, file3path,buildings,dimensions,district];
     const pythonProcess = spawn('python', [pythonScriptPath, ...args]);
 
     var outputData;
@@ -92,13 +89,9 @@ app.post('/upload', (req, res) => {
       console.log(`child process exited with code ${code}`);
     });
   });
-    // const target = req.body.target;
-    // const buildings = req.body.numBuildings;
-    // const dimensions = req.body.dimensionsArray;
-    // console.log(target);
-    // console.log(buildings);
-    // console.log(dimensions);
+    
 });
+
 app.post('/optimize', (req, res) => {
   upload(req, res, (err) => {
     if (err) {
@@ -112,12 +105,20 @@ app.post('/optimize', (req, res) => {
     //const district = req.body.district;
     const target = req.body.target;
     //const buildings = req.body.numBuildings;
-    const dimensions = req.body.dimensionsArray;
+    const dimensions = JSON.parse(req.body.dimensionsArray);
     const district = req.body.district;
     const Total_EM =req.body.Total_EM;
+    const Grid_EM =req.body.Grid_EM;
+    const diesel_emission =req.body.diesel_emission;
+    const Fuel_oil_EM =req.body.Fuel_oil_EM;
+
+    // console.log(district);
+    // console.log(target);
+    // console.log(dimensions);
+    //console.log(Grid_EM);
 
     const pythonScriptPath1 = path.join(__dirname,'test3.py');
-    const args1 = [target, dimensions, district,Total_EM];
+    const args1 = [target, dimensions, district,Total_EM,Grid_EM,diesel_emission,Fuel_oil_EM];
     const pythonProcess1 = spawn('python', [pythonScriptPath1, ...args1]);
 
     var outputData1;
@@ -143,7 +144,6 @@ app.post('/optimize', (req, res) => {
   });
 });
 
-    
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });

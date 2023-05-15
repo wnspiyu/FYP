@@ -2,25 +2,34 @@
   "main": {
     "name":"GHG Emission Reduction Tool for Apperal Industries",
     "description":"Reduce the carbon footprint of your products for a better world",
-    "image":"profilepic.jpg",
-    "bio":"Use this bio section as your way of describing yourself and saying what you do, what technologies you like to use or feel most comfortable with, describing your personality, or whatever else you feel like throwing in.",
-    "contactmessage":"Here is where you should write your message to readers to have them get in contact with you.",
+    "image":"bg3.jpeg",
+    "bio":"The main objective of this tool is to develop a methodology for obtaining a low carbon energy mix to reduce a certain GHG emission with minimum cost for Sri Lankan apparel industries. This includes quantifying the current GHG emission of the factory, providing the system sizes for desired emission limit, providing the financial evaluation of suggesting low carbon energy mix.",
+    "contactmessage":"If you have any problems or any suggesstions with this tool,contact us.",
+    "step1":"First create a usser account.",
+    "step2":"To calculate the current onsite emission,insert annualy electricity consumption, deisel consumption and boiler consumption. (Use the given templetes for the user inputs.)",
+    "step3":"After giving the 3 inputs, the tool calculate the current onsite emission.",
+    "step4":"Next you should set the required emission target according to science based target.And fill the required inputs.",
+    "step5":"Finally it generates the optimized system's GHG emission,system sizing and cost analysis.",
     "email": "youremailhere@gmail.com",
     "phone": "555-555-5555",
     "github":"https://github.com/nordicgiant2/react-nice-resume",
     "project":"https://github.com/nordicgiant2/react-nice-resume",
     "address":{
-      "street":"(Your Street)",
-      "city":"(Your City)",
-      "state":"(Your State)",
-      "zip": "(Your Zip/Postal Code)"
+      "head1":"Prof.K.T.M.U. Hemapala",
+      "head2":"Eng. Dhanushaka Thennakoon",
+      "head3":"Eng. Ruwini Thathsara",
+      "memb1": "M.H.S. Piyumantha",
+      "memb2": "W.N.S. Piyumantha",
+      "memb3": "R.P.A.C.M. Rajapaksha"
     },
     "website": "http://www.timbakerdev.com",
-    "resumedownload":"http://timbakerdev.com",
+    "electricity_templete":"https://docs.google.com/spreadsheets/d/1nxRpnSe1rZJi8UdPN6ohWQfKLtOMW8wN/edit?usp=share_link&ouid=113954264957729618457&rtpof=true&sd=true",
+    "boiler_templete":"https://docs.google.com/spreadsheets/d/1_wDIqatIzPDNa7Pi_Txc2BPQIUrwVCAa/edit?usp=share_link&ouid=113954264957729618457&rtpof=true&sd=true",
+    "diesel_templete":"https://docs.google.com/spreadsheets/d/1zjeagtx1zqxpCm1SGHPc51BR0qRGQgUt/edit?usp=share_link&ouid=113954264957729618457&rtpof=true&sd=true",
     "social":[
       {
         "name":"facebook",
-        "url":"https://github.com/nordicgiant2/react-nice-resume",
+        "url":"https://www.facebook.com/",
         "className":"fa fa-facebook"
       },
       {
@@ -30,17 +39,17 @@
       },
       {
         "name":"linkedin",
-        "url":"https://www.linkedin.com/in/tim-baker-8420009a/",
+        "url":"https://www.linkedin.com/",
         "className":"fa fa-linkedin"
       },
       {
         "name":"instagram",
-        "url":"http://instagram.com/tbaker_x",
+        "url":"http://instagram.com/",
         "className":"fa fa-instagram"
       },
       {
         "name":"github",
-        "url":"https://github.com/nordicgiant2/react-nice-resume",
+        "url":"https://github.com/",
         "className":"fa fa-github"
       }
     ]

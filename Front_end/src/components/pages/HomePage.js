@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import '../../App.css'
-//import { Bar } from 'react-chartjs-2';
-//import { Chart } from 'chart.js/auto';
+import { Bar } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
+import  Chart  from 'chart.js/auto';
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { Heading } from '@chakra-ui/react'
-// import BarChart from  './barchart';
+//import BarChart from  './barchart';
 
 
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
+  //FormErrorMessage,
+  //FormHelperText,
 } from '@chakra-ui/react'
 import {
   Alert,
@@ -31,6 +32,13 @@ function App() {
   const [target, setTarget] = useState(0);
   const [responseData, setResponseData] = useState(null);
   const [responseData1, setResponseData1] = useState(null);
+  const [chartData, setChartData] = useState(null);
+  const [chartData1, setChartData1] = useState(null);
+  const [chartData2, setChartData2] = useState(null);
+  const [chartData3, setChartData3] = useState(null);
+  const [chartData4, setChartData4] = useState(null);
+  const [chartData5, setChartData5] = useState(null);
+  const [chartData6, setChartData6] = useState(null);
 
   const handleFileChange = (event) => {
     const newFiles = [...event.target.files];
@@ -95,6 +103,9 @@ function App() {
     files.forEach((file) => {
       formData.append('files', file);
     });
+    formData.append('numBuildings', numBuildings);
+    formData.append('dimensionsArray', JSON.stringify(dimensionsArray));
+    formData.append('district', district);
     if (files.length < 3) {
       setIsError(true);
     } else {
@@ -108,20 +119,30 @@ function App() {
         .then((data) => {
           console.log(data);
           setResponseData(data);
+          // console.log(data.data);
+          setChartData([data.data.Grid_EM, data.data.diesel_emission, data.data.Fuel_oil_EM]);
+          setChartData1([data.data.Solar_EM_Red, data.data.BESS_EM_Red, data.data.GreenDiesel_EM_Red,data.data.Biomass_EM_Red]);
+          setChartData4([data.data.monthly_sum_elec[0],data.data.monthly_sum_elec[1],data.data.monthly_sum_elec[2],data.data.monthly_sum_elec[3],data.data.monthly_sum_elec[4],data.data.monthly_sum_elec[5],data.data.monthly_sum_elec[6],data.data.monthly_sum_elec[7],data.data.monthly_sum_elec[8],data.data.monthly_sum_elec[9],data.data.monthly_sum_elec[10],data.data.monthly_sum_elec[11]]);
+          
+          setChartData5([data.data.diesel_cosump_data[0],data.data.diesel_cosump_data[1],data.data.diesel_cosump_data[2],data.data.diesel_cosump_data[3],data.data.diesel_cosump_data[4],data.data.diesel_cosump_data[5],data.data.diesel_cosump_data[6],data.data.diesel_cosump_data[7],data.data.diesel_cosump_data[8],data.data.diesel_cosump_data[9],data.data.diesel_cosump_data[10],data.data.diesel_cosump_data[11]]);
+          
+          setChartData6([data.data.monthly_sum_boiler[0],data.data.monthly_sum_boiler[1],data.data.monthly_sum_boiler[2],data.data.monthly_sum_boiler[3],data.data.monthly_sum_boiler[4],data.data.monthly_sum_boiler[5],data.data.monthly_sum_boiler[6],data.data.monthly_sum_boiler[7],data.data.monthly_sum_boiler[8],data.data.monthly_sum_boiler[9],data.data.monthly_sum_boiler[10],data.data.monthly_sum_boiler[11]])
           setLoading(false);
         })
         .catch((error) => console.error(error));
     }
   };
-
   ////////////////////////2/////////////////////////////
   const handleUpload1 = () => {
     const formData1 = new FormData();
     formData1.append('target', target);
-    formData1.append('numBuildings', numBuildings);
-    formData1.append('dimensionsArray', JSON.stringify(dimensionsArray));
-    formData1.append('district', district);
     formData1.append('Total_EM', responseData.data.Total_EM);
+    formData1.append('Grid_EM', responseData.data.Grid_EM);
+    formData1.append('diesel_emission', responseData.data.diesel_emission);
+    formData1.append('Fuel_oil_EM', responseData.data.Fuel_oil_EM);
+    formData1.append('numBuildings', responseData.data.buildings);
+    formData1.append('dimensionsArray',JSON.stringify(responseData.data.dimensions));
+    formData1.append('district', responseData.data.district);
     setLoading(true);
     fetch('http://localhost:3100/optimize', {
       method: 'POST',
@@ -131,50 +152,329 @@ function App() {
       .then((data1) => {
         console.log(data1);
         setResponseData1(data1);
+        setChartData2([data1.data1.Ea,data1.data1.Eb,data1.data1.Ec,data1.data1.Ed]);
+        setChartData3([data1.data1.E_elec,data1.data1.E_DiG,data1.data1.E_Boi]);
         setLoading(false);
 
       })
       .catch((error) => console.error(error));
   };
 
-  ////////////////
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+      chart.ticks = chart.data.labels;
+      return;
+    }
+  });
+  
+  const data = {
+    labels: ["Grid", "Diesel", "Boiler"],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData,
+        backgroundColor: ["Red", "Blue", "Green"],
+        borderWidth: 1,
+      },
+      {
+        label: "Sales 2",
+        data: chartData3,
+        backgroundColor: ["Orange", "LightBlue", "LightGreen"],
+        borderWidth: 1,
+      },
+    ],
+  };
+  
+  const options = {
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const label = context.label;
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
 
-  // Chart.register({
-  //   id: 'category',
-  //   afterBuildTicks: function(chart) {
-  //       chart.ticks = chart.data.labels;
-  //       return;
-  //   }
-  // });
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
 
-  // const graphData = {
-  //   labels: ['A', 'B', 'C', 'D', 'E'],
-  //   datasets: [
-  //       {
-  //           label: 'My Data',
-  //           data: [1, 2, 3, 4, 5],
-  //           backgroundColor: 'rgba(255, 99, 132, 0.2)',
-  //           borderColor: 'rgba(255, 99, 132, 1)',
-  //           borderWidth: 1,
-  //       },
-  //   ],
-  // };
+  const data1 = {
+    labels: ["Grid", "Diesel", "Boiler"],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData,
+        backgroundColor: ["Red", "Blue", "Green"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
 
-  // const options = {
-  //   scales: {
-  //       y: {
-  //           beginAtZero: true,
-  //       },
-  //       x: {
-  //           type: 'category', // use the registered "category" scale here
-  //           display: true,
-  //           title: {
-  //               display: true,
-  //               text: 'My Categories',
-  //           },
-  //       },
-  //   },
-  // };
+  const options1 = {
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          padding: 20,
+          boxWidth: 10,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return context.label + ': ' + percentage + '%';
+          },
+        },
+      },
+    },
+  };
+
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
+
+  const data2 = {
+    labels: ["Solar EM Reduction", "Battery EM Reduction", "Green Diesel EM Reduction","Biomass EM Reduction"],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData1,
+        backgroundColor: ["Red", "Blue", "Green","Yellow"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options2 = {
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const label = context.label;
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
+
+  const data3 = {
+    labels: ["Solar EM Reduction", "Battery EM Reduction", "Green Diesel EM Reduction","Biomass EM Reduction"],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData2,
+        backgroundColor: ["Red", "Blue", "Green","Yellow"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options3 = {
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const label = context.label;
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
+
+  const data4 = {
+    labels: ["Grid", "Diesel", "Boiler"],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData3,
+        backgroundColor: ["Red", "Blue", "Green"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options4 = {
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          padding: 20,
+          boxWidth: 10,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return context.label + ': ' + percentage + '%';
+          },
+        },
+      },
+    },
+  };
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
+
+  const data5 = {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData4,
+        backgroundColor: ["Red", "Red", "Red","Red","Red", "Red", "Red","Red","Red", "Red", "Red","Red"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options5 = {
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const label = context.label;
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
+
+  const data6 = {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData5,
+        backgroundColor: ["Blue", "Blue", "Blue","Blue","Blue", "Blue", "Blue","Blue","Blue", "Blue", "Blue","Blue"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options6 = {
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const label = context.label;
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
+  Chart.register({
+    id: 'category',
+    afterBuildTicks: function(chart) {
+        chart.ticks = chart.data.labels;
+        return;
+    }
+  });
+
+  const data7 = {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [
+      {
+        label: "Sales",
+        data: chartData6,
+        backgroundColor: ["Green", "Green", "Green","Green","Green", "Green", "Green","Green","Green", "Green", "Green","Green"],
+        // borderColor: "white",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options7 = {
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const label = context.label;
+            return `${label}: ${value}`;
+          }
+        }
+      }
+    }
+  };
 
   return (
     <div style={{backgroundColor: "white", height: "100vh"}}>
@@ -208,8 +508,15 @@ function App() {
               <FormLabel style={{fontSize:"20px"}} htmlFor='email'>Annual Diesel Consumption</FormLabel>
               <input type="file" name="diesel" onChange={handleFileChange} />
             </FormControl>
+            <FormControl>
+              <FormLabel style={{fontSize:"15px"}} htmlFor='email'>Number of Buildings:</FormLabel>
+              <Input type="number" name="numBuildings" onChange={handleNumBuildingsChange} />
+              <center>{buildingInputs}</center><br></br>
+            </FormControl>
+            <center><label>District:</label></center>
+                <center><input type="text" name="district" onChange={handleDistrictChange} /></center>
 
-            <Button isLoading={loading} style={{ float: "right" }} type="button" onClick={handleUpload} colorScheme='orange'>Submit</Button>
+            <Button isLoading={loading} style={{ float: "right",minWidth: "100px", height: "40px", fontSize: "16px" }} type="button" onClick={handleUpload} colorScheme='orange'>Submit</Button>
           </form>
         </div>
         <form>
@@ -221,19 +528,50 @@ function App() {
                 <center><p>Diesel Emission: {responseData.data.diesel_emission}kgCO2e</p></center>
                 <center><p>Boiler Emission: {responseData.data.Fuel_oil_EM}kgCO2e</p></center>
                 <center><p>Total Emission: {responseData.data.Total_EM}kgCO2e</p></center><br></br>
-                {/* <BarChart/> */}
-                {/* <Bar data={graphData} options={options} canvasClassName="chart-canvas" /> */}
-                <center><p>We can help you to reduce your current onsite emission by using low carbon energy sources.Please set your emission target(kgCO2e)</p></center>
-                <center><input type="text" name="target" onChange={handleTarget} /></center>
-                <FormControl>
-                  <FormLabel style={{fontSize:"15px"}} htmlFor='email'>Number of Buildings:</FormLabel>
-                  <Input type="number" name="numBuildings" onChange={handleNumBuildingsChange} />
-                  <center>{buildingInputs}</center><br></br>
-                </FormControl>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "30%" }}>
+                    <Pie data={data1} options={options1} />
+                  </div>
+                </div>
+                <center><h2>EMISSION FROM IMPORTED ELECTRICITY.</h2></center>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "60%" }}>
+                    <Bar data={data5} options={options5} />
+                  </div>
+                </div>
+                <center><h2>EMISSION FROM BOILER.</h2></center>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "60%" }}>
+                    <Bar data={data7} options={options7} />
+                  </div>
+                </div>
+                <center><h2>EMISSION FROM Diesel.</h2></center>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "60%" }}>
+                    <Bar data={data6} options={options6} />
+                  </div>
+                </div>
+                {/* <center><p>Total buildings: {responseData.data.buildings}</p></center><br></br>
+                <center><p>Total dimensions: {JSON.stringify(responseData.data.dimensions)}</p></center><br></br>
+                <center><p>district: {responseData.data.district}</p></center><br></br> */}
+                <center><h2>Maximum Emision Reduction from the Alternatives</h2></center>
+                <center><p>Maximum Emission Reduction from Solar: {responseData.data.Solar_EM_Red}kgCO2e</p></center>
+                <center><p>Maximum Emission Reduction from Battery: {responseData.data.BESS_EM_Red}kgCO2e</p></center>
+                <center><p>Maximum Emission Reduction from Green Diesel:{responseData.data.GreenDiesel_EM_Red}kgCO2e</p></center>
+                <center><p>Maximum Emission Reduction from Biomass boiler: {responseData.data.Biomass_EM_Red}kgCO2e</p></center>
+                <center><p>Maximum Total Emission Reduction: {responseData.data.Total_max_EM_Red}kgCO2e</p></center><br></br>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "60%" }}>
+                    <Bar data={data2} options={options2} />
+                  </div>
+                </div>
                 
-                <center><label>District:</label></center>
-                <center><input type="text" name="district" onChange={handleDistrictChange} /></center><br></br>
-                <center><Button isLoading={loading} style={{ float: "right" }} type="button" onClick={handleUpload1} colorScheme='orange'>Optimize the Current System</Button></center>
+                <center><p>We can help you to reduce your current onsite emission by using low carbon energy sources.We use only SOLAR PV,BATTERY PACK,GREEN DIESEL and BIOMASS,Please set your emission target more than {responseData.data.Remaining}(kgCO2e)</p></center>
+                <center><input type="text" name="target" onChange={handleTarget} /></center>
+                
+                
+                
+                <center><Button isLoading={loading} style={{ float: "right",minWidth: "100px", height: "40px", fontSize: "16px" }} type="button" onClick={handleUpload1} colorScheme='orange'>Optimize the Current System</Button></center>
                 <p></p><br></br>
                 <p></p>
               </>
@@ -245,12 +583,27 @@ function App() {
             {responseData1 &&
               <>
                 <center><h5>Suggested System for Desired Emission Reduction</h5></center>
+                {/* <center><p>roof_sizes:{responseData1.data1.roof_sizes}</p></center><br></br>
+                <center><p>target:{responseData1.data1.target}</p></center><br></br>
+                <center><p>district:{responseData1.data1.district}</p></center><br></br>
+                <center><p>Total_EM:{responseData1.data1.Total_EM}</p></center> */}
                 {/* <center><p>No of panels:{responseData1.data.No_of_panels}</p></center> */}
+
+
+
                 <center><p>DC capacity for solar PV: {responseData1.data1.DC_capacityforsolar}</p></center>
+
+
+
+
                 {/* <center><p>Depth_of_discharge: {responseData1.data.Depth_of_discharge}</p></center> */}
                 {/* <center><p>Annual Green Diesel Fuel Capacity: {responseData1.data.Annual_Green_Diesel_Fuel_Capacity}</p></center> */}
                 {/* <center><p>Biomass Boiler Size:{responseData1.data.Biomass_Boiler_Size}</p></center> */}
                 {/* <center><p>DC capacity for Solar PV:{responseData1.data.DC_capacity_for_Solar_PV}</p></center> */}
+
+
+
+
                 <center><p>Battery Capacity:{responseData1.data1.Battery_Capacity}</p></center>
                 <center><p>Annual_HVO fuel requirement:{responseData1.data1.Annual_HVO_fuel_requirement}</p></center>
                 <center><p>Biomass Boiler Capacity:{responseData1.data1.Biomass_Boiler_Capacity}</p></center>
@@ -277,6 +630,28 @@ function App() {
                 <center><p>IRR of the overall energy system:{responseData1.data1.IRR_of_the_overall_energy_system}</p></center>
                 <center><p>NPV of the overall energy system:{responseData1.data1.NPV_of_the_overall_energy_system}</p></center>
                 <center><p>Payback Period of the overall energy system:{responseData1.data1.Payback_Period_of_the_overall_energy_system}</p></center>
+                <center><h5>GHG EMISSION REDUCTION FROM EACH FUEL TYPE IN THE SUGGESTED SYSTEM.</h5></center>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "60%" }}>
+                    <Bar data={data3} options={options3} />
+                  </div>
+                </div>
+                <center><h5>GHG EMISSION FOR THE SURRESTED SYSTEM.</h5></center>
+                <center><p>Grid Emission: {responseData1.data1.E_elec}kgCO2e</p></center>
+                <center><p>Diesel Emission: {responseData1.data1.E_DiG}kgCO2e</p></center>
+                <center><p>Boiler Emission: {responseData1.data1.E_Boi}kgCO2e</p></center>
+                <center><p>Total Emission: {responseData1.data1.E_Total}kgCO2e</p></center><br></br>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "30%" }}>
+                    <Pie data={data4} options={options4} />
+                  </div>
+                </div>
+                <center><h5>GHG EMISSION COMPARISION BETWEEN THE CURRENT AND THE SUGGESTED SYSTEM.</h5></center>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ width: "60%" }}>
+                    <Bar data={data} options={options} />
+                  </div>
+                </div>
               </>
             }
           </div>

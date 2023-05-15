@@ -14,24 +14,33 @@ target=sys.argv[1]
 dimensions=sys.argv[2]
 district = sys.argv[3]
 Total_EM=sys.argv[4]
+Grid_EM=sys.argv[5]
+diesel_emission=sys.argv[6]
+Fuel_oil_EM=sys.argv[7]
 # print(sys.argv)
-dimensions=ast.literal_eval(dimensions)
+#dimensions=ast.literal_eval(dimensions)
 target=int(target)
 Total_EM=float(Total_EM)
+Grid_EM=float(Grid_EM)
+diesel_emission=float(diesel_emission)
+Fuel_oil_EM=float(Fuel_oil_EM)
 #sys.stderr = sys.stdout
+values = dimensions.split(',')  # split string into array of values
+roof_sizes = []
+for i in range(0, len(values), 2):
+    roof_sizes.append([int(values[i]), int(values[i+1])])
 
+district = district.strip()
+district = district.capitalize()
 
-dis = district.strip()
-dis = district.capitalize()
-roof_sizes=dimensions
-
-EF = {"Solar":0.04, "Diesel":2.692, "HVO":0.195, "Fuel oil":0.28,  "Wood":0.06}
+EF = {"Solar":0, "Diesel":2.692, "HVO":0.195, "Fuel oil":0.28,  "Wood":0.007}
 Rs_USD = 320 
 
+Elec_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Scaled data from Imported electricity- dan.xlsx")
 
 GridEF_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Marginal Emission Factors.xlsx")
 
-Solar1kWp_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Monthly district solar average for 1kWp in kWh.xlsx",sheet_name = dis)
+Solar1kWp_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Monthly district solar average for 1kWp in kWh.xlsx",sheet_name = district)
 
 Diesel_cosumption_df=pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\uploads\Monthly Diesel consumption Data.xlsx")
 
@@ -40,6 +49,14 @@ Steam_demand = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\upload
 col_names=list(range(48))
 New_GridEF_df = pd.DataFrame(columns = col_names)
 New_Elec_df = pd.DataFrame(columns = col_names)
+m1 = 2  #time interval changing factor for grid ef (2= 15min to 30 min)
+m2 = 1  #time interval changing factor for elec consumption (No change)
+cols = 48 #for half hourly data
+for i in range(cols):
+  New_GridEF_df.iloc[:,i] = GridEF_df.iloc[:,m1*i:m1*i+m1].mean(axis=1)#take average of adjacent groups of 4 columns
+
+for i in range(cols):
+  New_Elec_df.iloc[:,i] = Elec_df.iloc[:,m2*i:m2*i+m2].mean(axis=1)  #take average of adjacent groups of 4 columns
 
 
 col_names=list(range(24))
@@ -383,12 +400,17 @@ def objective(x):
 # print("\n")
 
 # Maximum emission reduction from each alternative
-Solar_EM_Red = EmReductionSolar1kW * max_DC_capacity
-BESS_EM_Red = - BatteryEM
-GreenDiesel_EM_Red = diesel_emission - HVO_emission
-Biomass_EM_Red = Fuel_oil_EM - Biomass_EM
+# Solar_EM_Red = EmReductionSolar1kW * max_DC_capacity
+# BESS_EM_Red = - BatteryEM
+# GreenDiesel_EM_Red = diesel_emission - HVO_emission
+# Biomass_EM_Red = Fuel_oil_EM - Biomass_EM
 
 #print("\n")
+# Cost analysis for maximum emission reduction
+x0 = [max_DC_capacity, 0, 0, 0]
+x1 = [0, Req_battery_cap, 0, 0]
+x2 = [0, 0, Annual_HVO_req, 0 ]
+x3 = [0, 0, 0, Biomass_Boi_size]
 
 
 EmTarget = target
@@ -687,6 +709,19 @@ SYS_Capcost = np.sum(Cap_cost_arrays[:,0])
 # print('NPV of the overall energy system: $ %.2f ' %npv)
 # print("Payback Period of the overall energy system: %i Y" %PPB)
 
+Ea = (constraint1([x[0],0,0,0]) - EmTarget + Total_EM)  
+Eb = (constraint1([0,x[1],0,0]) - EmTarget + Total_EM) 
+Ec = (constraint1([0,0,x[2],0]) - EmTarget + Total_EM) 
+Ed = (constraint1([0,0,0,x[3]]) - EmTarget + Total_EM)
+Et= Ea+Eb+Ec+Ed
+
+#New emissions
+
+E_elec = Grid_EM - (constraint1([x[0],x[1],0,0]) - EmTarget + Total_EM) 
+E_DiG = diesel_emission - (constraint1([0,0,x[2],0]) - EmTarget + Total_EM) 
+E_Boi = Fuel_oil_EM - (constraint1([0,0,0,x[3]]) - EmTarget + Total_EM) 
+E_Total = Total_EM - (constraint1([x[0],x[1],x[2],x[3]]) - EmTarget + Total_EM)
+
 results = {
     # "district": dis,
     # "target": target,
@@ -698,8 +733,9 @@ results = {
     # "Annual_Green_Diesel_Fuel_Capacity":round(Annual_HVO_req,2),
     # "Biomass_Boiler_Size":round(Biomass_Boi_size,2),
     # "DC_capacity_for_Solar_PV":x[0],
-    "Battery_Capacity":x[1]/DoD/eff,
-    "Annual_HVO_fuel_requirement":x[2],
+    "Battery_Capacity":round(x[1]/DoD/eff,2),
+    # "Battery_Capacity":DoD/eff,
+    "Annual_HVO_fuel_requirement":round(x[2],2),
     "Biomass_Boiler_Capacity":round(x[3],2),
     "PV_system_capacity":round(P_PV,2),
     "PV_system_generated_energy":round(P_PV*Annual_gen,2),
@@ -717,7 +753,15 @@ results = {
     "Capital_cost_of_the_overall_energy_system":round(SYS_Capcost,2),
     "IRR_of_the_overall_energy_system":round((irr*100),2),
     "NPV_of_the_overall_energy_system":round(npv,2),
-    "Payback_Period_of_the_overall_energy_system":PPB
+    "Payback_Period_of_the_overall_energy_system":PPB,
+    "Ea":round(Ea,2),
+    "Eb":round(Eb,2),
+    "Ec":round(Ec,2),
+    "Ed":round(Ed,2),
+    "E_elec":round(E_elec,2),
+    "E_DiG":round(E_DiG,2),
+    "E_Boi":round(E_Boi,2),
+    "E_Total":round(E_Total,2)
 }
 
 print(json.dumps(results))

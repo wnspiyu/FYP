@@ -185,6 +185,7 @@ ul#nav li.current a { color: #fe6928; }
    background: #000524;
    padding-top: 96px;
    padding-bottom: 66px;
+   margin: right 25px;
    overflow: hidden;
 }
 
@@ -196,34 +197,42 @@ ul#nav li.current a { color: #fe6928; }
    color: #fff;
    margin-bottom: 12px;
 }
+#about h3 {
+   font: 16px/19px 'opensans-bold', sans-serif;
+   color: #fff;
+   margin-bottom: 12px;
+}
 #about p {
    line-height: 30px;
    color: #ccc;
 }
 #about .profile-pic {
    position: relative;
-   width: 120px;
-   height: 120px;
+   width: 220px;
+   height: 220px;
    border-radius: 100%;
 }
-#about .contact-details { width: 41.66667%; }
+#about .contact-details { width: 90%; }
 #about .download {
-   width: 58.33333%;
-   padding-top: 6px;
+   width:100%;
+   /* padding-top: 10px; */
 }
 #about .main-col { padding-right: 5%; }
 #about .download .button {
    margin-top: 6px;
    background: #444;
+   font-size: 15px;
 }
+
 #about .download .button:hover {
    background: #fff;
    color: #2B2B2B;
 }
 #about .download .button i {
    margin-right: 15px;
-   font-size: 20px;
+   font-size: 15px;
 }
+
 
 
 /* ------------------------------------------------------------------ */
@@ -791,8 +800,8 @@ call-to-action .button {
 #contact {
    background: #191919;
    padding-top: 96px;
-   padding-bottom: 102px;
-   color: #636363;
+   padding-bottom: 90px;
+   color: yellow;
 }
 #contact .section-head { margin-bottom: 42px; }
 
@@ -868,7 +877,7 @@ call-to-action .button {
    cursor: pointer;
    height: auto;
    display: inline-block;
-	border-radius: 0px;
+	border-radius: 7px;
    margin-left: 26%;
 }
 #contact button.submit:hover {

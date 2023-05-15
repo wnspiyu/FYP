@@ -5,12 +5,18 @@ class Contact extends Component {
   render() {
     if (!this.props.data) return null;
 
-    const name = this.props.data.name;
-    const street = this.props.data.address.street;
-    const city = this.props.data.address.city;
-    const state = this.props.data.address.state;
-    const zip = this.props.data.address.zip;
-    const phone = this.props.data.phone;
+    // const name = this.props.data.name;
+    // const street = this.props.data.address.street;
+    // const city = this.props.data.address.city;
+    // const state = this.props.data.address.state;
+    // const zip = this.props.data.address.zip;
+    // const head1 = this.props.data.head1;
+    // const head2 = this.props.data.head2;
+    // const head3 = this.props.data.head3;
+    // const memb1 = this.props.data.memb1;
+    // const memb2 = this.props.data.memb2;
+    // const memb3 = this.props.data.memb3;
+    // const phone = this.props.data.hhone;
     const message = this.props.data.contactmessage;
 
     return (
@@ -80,7 +86,7 @@ class Contact extends Component {
                     </label>
                     <textarea
                       cols="50"
-                      rows="15"
+                      rows="2"
                       id="contactMessage"
                       name="contactMessage"
                     ></textarea>
@@ -105,33 +111,36 @@ class Contact extends Component {
 
           <Slide right duration={1000}>
             <aside className="four columns footer-widgets">
-              <div className="widget widget_contact">
-                <h4>Address and Phone</h4>
+              {/* <div className="widget widget_contact">
+                <h4>Our Technical Team</h4>
                 <p className="address">
-                  {name}
-                  <br />
-                  {street} <br />
-                  {city}, {state} {zip}
-                  <br />
+                  {head1}<br />
+                  {head2}<br />
+                  {head3}<br />
+                  {memb1}<br />
+                  {memb2}<br />
+                  {memb3}<br />
                   <span>{phone}</span>
                 </p>
-              </div>
+              </div> */}
 
               <div className="widget widget_tweets">
-                <h4 className="widget-title">Latest Tweets</h4>
+                <h4 className="widget-title">Our Technical Team</h4>
                 <ul id="twitter">
                   <li>
                     <span>
-                      This is Photoshop's version of Lorem Ipsum. Proin gravida
-                      nibh vel velit auctor aliquet. Aenean sollicitudin, lorem
-                      quis bibendum auctor, nisi elit consequat ipsum
-                      <a href="./">http://t.co/CGIrdxIlI3</a>
+                      <ul>
+                        <li>Prof.K.T.M.U. Hemapala</li>
+                        <li>Eng. Dhanushaka Thennakoon</li>
+                        <li>Eng. Ruwini Thathsara</li>
+                        <li>M.H.S. Piyumantha</li>
+                        <li>W.N.S. Piyumantha</li>
+                        <li>R.P.A.C.M. Rajapaksha</li>
+                      </ul>
                     </span>
-                    <b>
-                      <a href="./">2 Days Ago</a>
-                    </b>
+                    
                   </li>
-                  <li>
+                  {/* <li>
                     <span>
                       Sed ut perspiciatis unde omnis iste natus error sit
                       voluptatem accusantium doloremque laudantium, totam rem
@@ -142,7 +151,7 @@ class Contact extends Component {
                     <b>
                       <a href="./">3 Days Ago</a>
                     </b>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </aside>
