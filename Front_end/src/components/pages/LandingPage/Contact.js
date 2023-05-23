@@ -40,8 +40,8 @@ class Contact extends Component {
             <div className="eight columns">
               <form action="" method="post" id="contactForm" name="contactForm">
                 <fieldset>
-                  <div>
-                    <label htmlFor="contactName">
+                  <div >
+                    <label htmlFor="contactName" >
                       Name <span className="required">*</span>
                     </label>
                     <input
@@ -51,9 +51,9 @@ class Contact extends Component {
                       id="contactName"
                       name="contactName"
                       onChange={this.handleChange}
+                      style={{padding:"5px", marginBottom: "5px" }}
                     />
                   </div>
-
                   <div>
                     <label htmlFor="contactEmail">
                       Email <span className="required">*</span>
@@ -65,21 +65,21 @@ class Contact extends Component {
                       id="contactEmail"
                       name="contactEmail"
                       onChange={this.handleChange}
+                      style={{padding:"5px", marginBottom: "5px" }}
                     />
                   </div>
-
                   <div>
                     <label htmlFor="contactSubject">Subject</label>
                     <input
                       type="text"
                       defaultValue=""
-                      size="35"
+                      size="50"
                       id="contactSubject"
                       name="contactSubject"
                       onChange={this.handleChange}
+                      style={{padding:"5px", marginBottom: "5px" }}
                     />
                   </div>
-
                   <div>
                     <label htmlFor="contactMessage">
                       Message <span className="required">*</span>
@@ -91,7 +91,6 @@ class Contact extends Component {
                       name="contactMessage"
                     ></textarea>
                   </div>
-
                   <div>
                     <button className="submit">Submit</button>
                     <span id="image-loader">

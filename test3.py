@@ -33,7 +33,7 @@ for i in range(0, len(values), 2):
 district = district.strip()
 district = district.capitalize()
 
-EF = {"Solar":0, "Diesel":2.692, "HVO":0.195, "Fuel oil":0.28,  "Wood":0.007}
+EF = {"Solar":0, "Diesel":2.692, "HVO":0.195, "Fuel oil":0.28,  "Wood":0.02855}
 Rs_USD = 320 
 
 Elec_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Scaled data from Imported electricity- dan.xlsx")
@@ -507,7 +507,7 @@ def PVsizing(P_PV):
     N_60kW = 1
 
   elif P_remain > 72:
-    N_100kW =+ 1
+    N_100kW += 1
 
   return N_panel, P_PV, N_100kW, N_60kW
 

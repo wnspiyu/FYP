@@ -6,14 +6,9 @@ import  Chart  from 'chart.js/auto';
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { Heading } from '@chakra-ui/react'
-//import BarChart from  './barchart';
-
-
 import {
   FormControl,
   FormLabel,
-  //FormErrorMessage,
-  //FormHelperText,
 } from '@chakra-ui/react'
 import {
   Alert,
@@ -172,15 +167,15 @@ function App() {
     labels: ["Grid", "Diesel", "Boiler"],
     datasets: [
       {
-        label: "Sales",
+        label: "Current System",
         data: chartData,
-        backgroundColor: ["Red", "Blue", "Green"],
+        backgroundColor: ["	mediumblue", "	mediumblue", "	mediumblue"],
         borderWidth: 1,
       },
       {
-        label: "Sales 2",
+        label: "Proposed System",
         data: chartData3,
-        backgroundColor: ["Orange", "LightBlue", "LightGreen"],
+        backgroundColor: ["springgreen", "springgreen", "springgreen"],
         borderWidth: 1,
       },
     ],
@@ -189,7 +184,7 @@ function App() {
   const options = {
     plugins: {
       legend: {
-        display: false
+        display: true
       },
       tooltip: {
         callbacks: {
@@ -198,6 +193,20 @@ function App() {
             const label = context.label;
             return `${label}: ${value}`;
           }
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Source'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Emission(kgCO2e)'
         }
       }
     }
@@ -218,7 +227,6 @@ function App() {
         label: "Sales",
         data: chartData,
         backgroundColor: ["Red", "Blue", "Green"],
-        // borderColor: "white",
         borderWidth: 1,
       },
     ],
@@ -282,6 +290,20 @@ function App() {
           }
         }
       }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Source'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Emission(kgCO2e)'
+        }
+      }
     }
   };
   Chart.register({
@@ -319,6 +341,20 @@ function App() {
           }
         }
       }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Source'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Emission(kgCO2e)'
+        }
+      }
     }
   };
   Chart.register({
@@ -336,7 +372,6 @@ function App() {
         label: "Sales",
         data: chartData3,
         backgroundColor: ["Red", "Blue", "Green"],
-        // borderColor: "white",
         borderWidth: 1,
       },
     ],
@@ -379,7 +414,6 @@ function App() {
         label: "Sales",
         data: chartData4,
         backgroundColor: ["Red", "Red", "Red","Red","Red", "Red", "Red","Red","Red", "Red", "Red","Red"],
-        // borderColor: "white",
         borderWidth: 1,
       },
     ],
@@ -399,6 +433,20 @@ function App() {
           }
         }
       }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Months'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Emission(kgCO2e)'
+        }
+      }
     }
   };
   Chart.register({
@@ -416,7 +464,6 @@ function App() {
         label: "Sales",
         data: chartData5,
         backgroundColor: ["Blue", "Blue", "Blue","Blue","Blue", "Blue", "Blue","Blue","Blue", "Blue", "Blue","Blue"],
-        // borderColor: "white",
         borderWidth: 1,
       },
     ],
@@ -436,6 +483,20 @@ function App() {
           }
         }
       }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Months'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Emission(kgCO2e)'
+        }
+      }
     }
   };
   Chart.register({
@@ -453,7 +514,6 @@ function App() {
         label: "Sales",
         data: chartData6,
         backgroundColor: ["Green", "Green", "Green","Green","Green", "Green", "Green","Green","Green", "Green", "Green","Green"],
-        // borderColor: "white",
         borderWidth: 1,
       },
     ],
@@ -473,15 +533,27 @@ function App() {
           }
         }
       }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Months'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Emission(kgCO2e)'
+        }
+      }
     }
   };
 
   return (
-    <div style={{backgroundColor: "white", height: "100vh"}}>
-
-
+    <div style={{backgroundColor: "#191970",height: "825vh"}}>
       <div className='center' style={{ padding: "20px", width: "70%" }}>
-        <div className='card'>
+        <div style={{backgroundColor: "lightgoldenrodyellow"}} className='card'>
           <form>
 
             <Heading pb={3} as='h2' size='xl'>Fill Your Industry Details</Heading>
@@ -514,13 +586,14 @@ function App() {
               <center>{buildingInputs}</center><br></br>
             </FormControl>
             <center><label>District:</label></center>
-                <center><input type="text" name="district" onChange={handleDistrictChange} /></center>
+                <center><input type="text" name="district" onChange={handleDistrictChange}style={{ width: "100%",padding:"5px" }} /></center>
 
             <Button isLoading={loading} style={{ float: "right",minWidth: "100px", height: "40px", fontSize: "16px" }} type="button" onClick={handleUpload} colorScheme='orange'>Submit</Button>
           </form>
         </div>
+        
         <form>
-          <div className="card">
+          <div style={{backgroundColor: "lightcyan"}} className="card">
             {responseData &&
               <>
                 <center><h2>GHG Emission for the Current System</h2></center>
@@ -528,6 +601,7 @@ function App() {
                 <center><p>Diesel Emission: {responseData.data.diesel_emission}kgCO2e</p></center>
                 <center><p>Boiler Emission: {responseData.data.Fuel_oil_EM}kgCO2e</p></center>
                 <center><p>Total Emission: {responseData.data.Total_EM}kgCO2e</p></center><br></br>
+                
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div style={{ width: "30%" }}>
                     <Pie data={data1} options={options1} />
@@ -545,32 +619,29 @@ function App() {
                     <Bar data={data7} options={options7} />
                   </div>
                 </div>
-                <center><h2>EMISSION FROM Diesel.</h2></center>
+                <center><h2>EMISSION FROM DIESEL.</h2></center>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div style={{ width: "60%" }}>
                     <Bar data={data6} options={options6} />
                   </div>
                 </div>
-                {/* <center><p>Total buildings: {responseData.data.buildings}</p></center><br></br>
-                <center><p>Total dimensions: {JSON.stringify(responseData.data.dimensions)}</p></center><br></br>
-                <center><p>district: {responseData.data.district}</p></center><br></br> */}
-                <center><h2>Maximum Emision Reduction from the Alternatives</h2></center>
-                <center><p>Maximum Emission Reduction from Solar: {responseData.data.Solar_EM_Red}kgCO2e</p></center>
-                <center><p>Maximum Emission Reduction from Battery: {responseData.data.BESS_EM_Red}kgCO2e</p></center>
-                <center><p>Maximum Emission Reduction from Green Diesel:{responseData.data.GreenDiesel_EM_Red}kgCO2e</p></center>
-                <center><p>Maximum Emission Reduction from Biomass boiler: {responseData.data.Biomass_EM_Red}kgCO2e</p></center>
-                <center><p>Maximum Total Emission Reduction: {responseData.data.Total_max_EM_Red}kgCO2e</p></center><br></br>
+                {/* <div style={{ border: "1px solid #ccc", padding: "20px", borderRadius: "4px",backgroundColor:'lightgreen',width:"60%",alignSelf:"center" }}> */}
+                  <center><h2>Maximum Emision Reduction from the Alternatives</h2></center>
+                  <center><p> Maximum Emission Reduction from Solar:{responseData.data.Solar_EM_Red}kgCO2e</p></center>
+                  <center><p>Maximum Emission Reduction from Battery: {responseData.data.BESS_EM_Red}kgCO2e</p></center>
+                  <center><p>Maximum Emission Reduction from Green Diesel:{responseData.data.GreenDiesel_EM_Red}kgCO2e</p></center>
+                  <center><p>Maximum Emission Reduction from Biomass boiler: {responseData.data.Biomass_EM_Red}kgCO2e</p></center>
+                  <center><p>Maximum Total Emission Reduction: {responseData.data.Total_max_EM_Red}kgCO2e</p></center><br></br>
+                {/* </div> */}
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div style={{ width: "60%" }}>
                     <Bar data={data2} options={options2} />
                   </div>
-                </div>
-                
-                <center><p>We can help you to reduce your current onsite emission by using low carbon energy sources.We use only SOLAR PV,BATTERY PACK,GREEN DIESEL and BIOMASS,Please set your emission target more than {responseData.data.Remaining}(kgCO2e)</p></center>
-                <center><input type="text" name="target" onChange={handleTarget} /></center>
-                
-                
-                
+                </div>                
+                <center><p>We can help you to reduce your current onsite emission by using low carbon energy sources.We use only SOLAR PV,BATTERY PACK,GREEN DIESEL and BIOMASS,Please set your emission target more than {" "}
+                  <strong style={{ fontWeight: "bold" }}>{responseData.data.Remaining}kgCO2e</strong> 
+                </p></center>
+                <center><input type="text" name="target" onChange={handleTarget} /></center>                
                 <center><Button isLoading={loading} style={{ float: "right",minWidth: "100px", height: "40px", fontSize: "16px" }} type="button" onClick={handleUpload1} colorScheme='orange'>Optimize the Current System</Button></center>
                 <p></p><br></br>
                 <p></p>
@@ -579,57 +650,91 @@ function App() {
           </div>
         </form>
         <form>
-          <div className="card">
+          <div style={{backgroundColor: ""}} className="card">
             {responseData1 &&
               <>
-                <center><h5>Suggested System for Desired Emission Reduction</h5></center>
-                {/* <center><p>roof_sizes:{responseData1.data1.roof_sizes}</p></center><br></br>
-                <center><p>target:{responseData1.data1.target}</p></center><br></br>
-                <center><p>district:{responseData1.data1.district}</p></center><br></br>
-                <center><p>Total_EM:{responseData1.data1.Total_EM}</p></center> */}
-                {/* <center><p>No of panels:{responseData1.data.No_of_panels}</p></center> */}
-
-
-
-                <center><p>DC capacity for solar PV: {responseData1.data1.DC_capacityforsolar}</p></center>
-
-
-
-
-                {/* <center><p>Depth_of_discharge: {responseData1.data.Depth_of_discharge}</p></center> */}
-                {/* <center><p>Annual Green Diesel Fuel Capacity: {responseData1.data.Annual_Green_Diesel_Fuel_Capacity}</p></center> */}
-                {/* <center><p>Biomass Boiler Size:{responseData1.data.Biomass_Boiler_Size}</p></center> */}
-                {/* <center><p>DC capacity for Solar PV:{responseData1.data.DC_capacity_for_Solar_PV}</p></center> */}
-
-
-
-
-                <center><p>Battery Capacity:{responseData1.data1.Battery_Capacity}</p></center>
-                <center><p>Annual_HVO fuel requirement:{responseData1.data1.Annual_HVO_fuel_requirement}</p></center>
-                <center><p>Biomass Boiler Capacity:{responseData1.data1.Biomass_Boiler_Capacity}</p></center>
-                <center><p></p></center><br></br>
-                <center><h5>Solar System Sizing</h5></center>
-                <center><p>PV system capacity:{responseData1.data1.PV_system_capacity}</p></center>
-                <center><p>PV system generated energy:{responseData1.data1.PV_system_generated_energy}</p></center>
-                <center><p>No. of solar panel:{responseData1.data1.No_of_solar_panel}</p></center>
-                <center><p>No. of 100kW inverters:{responseData1.data1.No_of_100kW_inverters}</p></center>
-                <center><p>No. of 60kW inverters:{responseData1.data1.No_of_60kW_inverters}</p></center>
-                <center><p>Maximum number of panel for a string:{responseData1.data1.Maximum_number_of_panel_for_a_string}</p></center>
-                <center><p>Minimum number of panel for a string:{responseData1.data1.Minimum_number_of_panel_for_a_string}</p></center>
-                <center><p></p></center><br></br>
-                <center><h5>BESS Sizing</h5></center>
-                <center><p>BESS Voltage:{responseData1.data1.BESS_Voltage}</p></center>
-                <center><p>No of batteries in Series per string:{responseData1.data1.No_of_batteries_in_Series_per_string}</p></center>
-                <center><p>No of strings in parallel:{responseData1.data1.No_of_strings_in_parallel}</p></center>
-                <center><p>Battery Bank Capacity:{responseData1.data1.Battery_Bank_Capacity}</p></center>
-                <center><p></p></center><br></br>
-                <center><h5>For the Suggested System</h5></center>
-                <center><p>Net Present Value:{responseData1.data1.NPV}</p></center>
-                <center><p>New Emission:{responseData1.data1.New_Emission}</p></center>
-                <center><p>Capital cost of the overall energy system:{responseData1.data1.Capital_cost_of_the_overall_energy_system}</p></center>
-                <center><p>IRR of the overall energy system:{responseData1.data1.IRR_of_the_overall_energy_system}</p></center>
-                <center><p>NPV of the overall energy system:{responseData1.data1.NPV_of_the_overall_energy_system}</p></center>
-                <center><p>Payback Period of the overall energy system:{responseData1.data1.Payback_Period_of_the_overall_energy_system}</p></center>
+                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'lightgreen',width:"60%",alignSelf:"center" }}>
+                  <center><h5>SUGGESTED SYSTEM FOR DESIRED EMISSION REDUCTION</h5></center>
+                  <center><p>DC capacity for solar PV:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.DC_capacityforsolar}kW</strong>
+                  </p></center>
+                  <center><p>Battery Capacity:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Battery_Capacity}kWh</strong>
+                  </p></center>
+                  <center><p>Annual HVO fuel requirement:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Annual_HVO_fuel_requirement}l</strong>
+                  </p></center>
+                  <center><p>Biomass Boiler Capacity:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Biomass_Boiler_Capacity}SteamKg/h</strong>
+                  </p></center>
+                  <center><p></p></center>
+                </div>
+                <br></br>
+                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'yellow',width:"60%",alignSelf:"center" }}>
+                  <center><h5>SOLAR SYSTEM SIZING</h5></center>
+                  <center><p>PV system capacity:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.PV_system_capacity}kW</strong>
+                  </p></center>
+                  <center><p>PV system generated energy:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.PV_system_generated_energy}kWh</strong>
+                  </p></center>
+                  <center><p>No. of solar panel:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_solar_panel}</strong>
+                  </p></center>
+                  <center><p>No. of 100kW inverters:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_100kW_inverters}</strong>
+                  </p></center>
+                  <center><p>No. of 60kW inverters:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_60kW_inverters}</strong>
+                  </p></center>
+                  <center><p>Maximum number of panel for a string:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Maximum_number_of_panel_for_a_string}</strong>
+                  </p></center>
+                  <center><p>Minimum number of panel for a string:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Minimum_number_of_panel_for_a_string}</strong>
+                  </p></center>
+                  <center><p></p></center>
+                </div>
+                <br></br>
+                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'wheat',width:"60%",alignSelf:"center" }}>
+                  <center><h5>BATTERY ENERGY STORAGE SYSTEM SIZING</h5></center>
+                  <center><p>BESS Voltage:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.BESS_Voltage}V</strong>
+                  </p></center>
+                  <center><p>No of batteries in Series per string:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_batteries_in_Series_per_string}</strong>
+                  </p></center>
+                  <center><p>No of strings in parallel:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_strings_in_parallel}</strong>
+                  </p></center>
+                  <center><p>Battery Bank Capacity:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Battery_Bank_Capacity}Ah</strong>
+                  </p></center>
+                  <center><p></p></center>
+                </div>
+                <br></br>
+                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'aqua',width:"60%",alignSelf:"center" }}>
+                  <center><h5>FOR THE SUGGESTED SYSTEM</h5></center>
+                  {/* <center><p>Net Present Value:{" "}
+                    <strong style={{fontWeight:"bold"}}>${responseData1.data1.NPV}</strong>
+                  </p></center> */}
+                  <center><p>New Emission:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.New_Emission}kgCO2e</strong>
+                  </p></center>
+                  <center><p>Capital cost of the overall energy system:{" "}
+                    <strong style={{fontWeight:"bold"}}>${responseData1.data1.Capital_cost_of_the_overall_energy_system}</strong>
+                  </p></center>
+                  <center><p>IRR of the overall energy system:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.IRR_of_the_overall_energy_system}%</strong>
+                  </p></center>
+                  <center><p>NPV of the overall energy system:{" "}
+                    <strong style={{fontWeight:"bold"}}>${responseData1.data1.NPV_of_the_overall_energy_system}</strong>
+                  </p></center>
+                  <center><p>Payback Period of the overall energy system:{" "}
+                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Payback_Period_of_the_overall_energy_system}years</strong>
+                  </p></center>
+                </div>
+                <br></br>
                 <center><h5>GHG EMISSION REDUCTION FROM EACH FUEL TYPE IN THE SUGGESTED SYSTEM.</h5></center>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div style={{ width: "60%" }}>
@@ -664,4 +769,3 @@ function App() {
 export default App;
 
 
-//onClick={handleClick}

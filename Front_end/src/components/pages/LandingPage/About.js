@@ -50,7 +50,7 @@ class About extends Component {
                     <li>{step3}</li>
                     <li>{step4}</li>
                     <li>{step5}</li>
-                    <a href="https://drive.google.com/file/d/1YhHDDb1olIG4TzCzeb-8_wKOJj5KVj_u/view?usp=sharing" target="_blank" rel="noopener noreferrer">Click here to read our assumptions</a>
+                    <a href="https://drive.google.com/file/d/1daMSCjGC6pFY2Ff-GYK50aAMfX1upEYP/view?usp=sharing" target="_blank" rel="noopener noreferrer">Click here to read our assumptions</a>
                     <br></br><br></br>
                   </p>
                   

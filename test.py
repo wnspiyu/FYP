@@ -24,7 +24,7 @@ def calculate_onsite_emission(file1path, file2path,file3path,buildings,dimension
     C = {"Solar":3000, "BESS":1500, "HVO":1}       # $/kW,  $/Kwh
 
     
-    EF = {"Solar":0, "Diesel":2.692, "HVO":0.195, "Fuel oil":0.28,  "Wood":0.007}   
+    EF = {"Solar":0, "Diesel":2.692, "HVO":0.195, "Fuel oil":0.28,  "Wood":0.02855}   
         #kgCO2e/kWh,   kgCO2e/l,        kgCO2e/l,     kgCO2e/kWh,     kgCO2e/kg
 
     # 1kWh = 3.6 MJ
