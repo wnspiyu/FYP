@@ -325,3 +325,31 @@ footer p {
     padding: 10px;
   }
   
+  .emission-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color:lightblue;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba
+  }  
+  .custom-shape-divider-bottom-1685446723 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-bottom-1685446723 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 249px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1685446723 .shape-fill {
+    fill: #EFEBCE;
+}

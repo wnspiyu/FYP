@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 import '../../App.css'
 import { Bar } from 'react-chartjs-2';
 import { Pie } from 'react-chartjs-2';
@@ -189,9 +190,9 @@ function App() {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const value = context.parsed;
-            const label = context.label;
-            return `${label}: ${value}`;
+            const value = context.parsed['y'].toFixed(3);
+            //const label = context.label.data;
+            return `${value}`;
           }
         }
       }
@@ -284,9 +285,9 @@ function App() {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const value = context.parsed;
-            const label = context.label;
-            return `${label}: ${value}`;
+            const value = context.parsed['y'].toFixed(3);
+            //const label = context.label.data;
+            return `${value}`;
           }
         }
       }
@@ -335,9 +336,9 @@ function App() {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const value = context.parsed;
-            const label = context.label;
-            return `${label}: ${value}`;
+            const value = context.parsed['y'].toFixed(3);
+            //const label = context.label.data;
+            return `${value}`;
           }
         }
       }
@@ -427,9 +428,9 @@ function App() {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const value = context.parsed;
-            const label = context.label;
-            return `${label}: ${value}`;
+            const value = context.parsed['y'].toFixed(3);
+            //const label = context.label.data;
+            return `${value}`;
           }
         }
       }
@@ -477,9 +478,9 @@ function App() {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const value = context.parsed;
-            const label = context.label;
-            return `${label}: ${value}`;
+            const value = context.parsed['y'].toFixed(3);
+            //const label = context.label.data;
+            return `${value}`;
           }
         }
       }
@@ -527,9 +528,9 @@ function App() {
       tooltip: {
         callbacks: {
           label: function(context) {
-            const value = context.parsed;
-            const label = context.label;
-            return `${label}: ${value}`;
+            const value = context.parsed['y'].toFixed(3);
+            //const label = context.label.data;
+            return `${value}`;
           }
         }
       }
@@ -551,7 +552,7 @@ function App() {
   };
 
   return (
-    <div style={{backgroundColor: "#191970",height: "825vh"}}>
+    <div style={{backgroundColor: "#191970"}}>
       <div className='center' style={{ padding: "20px", width: "70%" }}>
         <div style={{backgroundColor: "lightgoldenrodyellow"}} className='card'>
           <form>
@@ -653,86 +654,128 @@ function App() {
           <div style={{backgroundColor: ""}} className="card">
             {responseData1 &&
               <>
-                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'lightgreen',width:"60%",alignSelf:"center" }}>
-                  <center><h5>SUGGESTED SYSTEM FOR DESIRED EMISSION REDUCTION</h5></center>
-                  <center><p>DC capacity for solar PV:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.DC_capacityforsolar}kW</strong>
-                  </p></center>
-                  <center><p>Battery Capacity:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Battery_Capacity}kWh</strong>
-                  </p></center>
-                  <center><p>Annual HVO fuel requirement:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Annual_HVO_fuel_requirement}l</strong>
-                  </p></center>
-                  <center><p>Biomass Boiler Capacity:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Biomass_Boiler_Capacity}SteamKg/h</strong>
-                  </p></center>
-                  <center><p></p></center>
+                {/* <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'lightgreen',width:"60%",alignSelf:"center" }}> */}
+                <div style={{ border: "1px solid #ccc", padding: "5px", borderRadius: "5px", backgroundColor: 'lightgreen', width: "60%", alignSelf: "center" }}>
+                <center><h5>SUGGESTED SYSTEM FOR DESIRED EMISSION REDUCTION</h5></center>
+                <div style={{ marginLeft: "30px" }}>
+                    <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                      <tbody>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>DC capacity for solar PV:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.DC_capacityforsolar}kW</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Battery Capacity:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Battery_Capacity}kWh</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Annual HVO fuel requirement:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Annual_HVO_fuel_requirement}l</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Biomass Boiler Capacity:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Biomass_Boiler_Capacity}SteamKg/h</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+
+
+                {/* </div> */}
                 <br></br>
-                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'yellow',width:"60%",alignSelf:"center" }}>
+                <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px",backgroundColor:'yellow',width:"60%",alignSelf:"center" }}>
                   <center><h5>SOLAR SYSTEM SIZING</h5></center>
-                  <center><p>PV system capacity:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.PV_system_capacity}kW</strong>
-                  </p></center>
-                  <center><p>PV system generated energy:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.PV_system_generated_energy}kWh</strong>
-                  </p></center>
-                  <center><p>No. of solar panel:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_solar_panel}</strong>
-                  </p></center>
-                  <center><p>No. of 100kW inverters:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_100kW_inverters}</strong>
-                  </p></center>
-                  <center><p>No. of 60kW inverters:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_60kW_inverters}</strong>
-                  </p></center>
-                  <center><p>Maximum number of panel for a string:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Maximum_number_of_panel_for_a_string}</strong>
-                  </p></center>
-                  <center><p>Minimum number of panel for a string:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Minimum_number_of_panel_for_a_string}</strong>
-                  </p></center>
-                  <center><p></p></center>
+                  <div style={{ marginLeft: "30px" }}>
+                    <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                      <tbody>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>PV system capacity:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.PV_system_capacity}kW</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>PV system generated energy:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.PV_system_generated_energy}kWh</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>No. of solar panel:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.No_of_solar_panel}</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>No. of 100kW inverters:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.No_of_100kW_inverters}</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>No. of 60kW inverters:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.No_of_60kW_inverters}</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Maximum number of panel for a string:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Maximum_number_of_panel_for_a_string}</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Minimum number of panel for a string:</td>
+                          <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Minimum_number_of_panel_for_a_string}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <br></br>
                 <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'wheat',width:"60%",alignSelf:"center" }}>
                   <center><h5>BATTERY ENERGY STORAGE SYSTEM SIZING</h5></center>
-                  <center><p>BESS Voltage:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.BESS_Voltage}V</strong>
-                  </p></center>
-                  <center><p>No of batteries in Series per string:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_batteries_in_Series_per_string}</strong>
-                  </p></center>
-                  <center><p>No of strings in parallel:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.No_of_strings_in_parallel}</strong>
-                  </p></center>
-                  <center><p>Battery Bank Capacity:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Battery_Bank_Capacity}Ah</strong>
-                  </p></center>
-                  <center><p></p></center>
+                  <div style={{ marginLeft: "30px" }}>
+                    <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                        <tbody>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>BESS Voltage:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.BESS_Voltage}V</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>No of batteries in Series per string:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.No_of_batteries_in_Series_per_string}</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>No of strings in parallel:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.No_of_strings_in_parallel}</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Battery Bank Capacity:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Battery_Bank_Capacity}Ah</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                  </div>
                 </div>
                 <br></br>
                 <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "4px",backgroundColor:'aqua',width:"60%",alignSelf:"center" }}>
                   <center><h5>FOR THE SUGGESTED SYSTEM</h5></center>
-                  {/* <center><p>Net Present Value:{" "}
-                    <strong style={{fontWeight:"bold"}}>${responseData1.data1.NPV}</strong>
-                  </p></center> */}
-                  <center><p>New Emission:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.New_Emission}kgCO2e</strong>
-                  </p></center>
-                  <center><p>Capital cost of the overall energy system:{" "}
-                    <strong style={{fontWeight:"bold"}}>${responseData1.data1.Capital_cost_of_the_overall_energy_system}</strong>
-                  </p></center>
-                  <center><p>IRR of the overall energy system:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.IRR_of_the_overall_energy_system}%</strong>
-                  </p></center>
-                  <center><p>NPV of the overall energy system:{" "}
-                    <strong style={{fontWeight:"bold"}}>${responseData1.data1.NPV_of_the_overall_energy_system}</strong>
-                  </p></center>
-                  <center><p>Payback Period of the overall energy system:{" "}
-                    <strong style={{fontWeight:"bold"}}>{responseData1.data1.Payback_Period_of_the_overall_energy_system}years</strong>
-                  </p></center>
+                  <div style={{ marginLeft: "30px" }}>
+                    <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                        <tbody>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>New Emission:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.New_Emission}kgCO2e</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Capital cost of the overall energy system:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>${responseData1.data1.Capital_cost_of_the_overall_energy_system}</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>IRR of the overall energy system:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.IRR_of_the_overall_energy_system}%</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>NPV of the overall energy system:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>${responseData1.data1.NPV_of_the_overall_energy_system}</td>
+                          </tr>
+                          <tr>
+                            <td style={{ padding: "5px", textAlign: "left",width: "60%" }}>Payback Period of the overall energy system:</td>
+                            <td style={{ padding: "5px", textAlign: "left", fontWeight: "bold" }}>{responseData1.data1.Payback_Period_of_the_overall_energy_system}years</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                  </div>
                 </div>
                 <br></br>
                 <center><h5>GHG EMISSION REDUCTION FROM EACH FUEL TYPE IN THE SUGGESTED SYSTEM.</h5></center>
@@ -741,7 +784,7 @@ function App() {
                     <Bar data={data3} options={options3} />
                   </div>
                 </div>
-                <center><h5>GHG EMISSION FOR THE SURRESTED SYSTEM.</h5></center>
+                <center><h5>GHG EMISSION FOR THE SUGGESTED SYSTEM.</h5></center>
                 <center><p>Grid Emission: {responseData1.data1.E_elec}kgCO2e</p></center>
                 <center><p>Diesel Emission: {responseData1.data1.E_DiG}kgCO2e</p></center>
                 <center><p>Boiler Emission: {responseData1.data1.E_Boi}kgCO2e</p></center>
@@ -757,6 +800,8 @@ function App() {
                     <Bar data={data} options={options} />
                   </div>
                 </div>
+                <center><h5>This tool helps you to reduce your GHG emission only from the energy switching.We replace current energyy sources from the low emission sources. But there are some methods for emission reducion.Do you interest to know them? <Link to="/data">click here</Link> </h5></center>
+
               </>
             }
           </div>
