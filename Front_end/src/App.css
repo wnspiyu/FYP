@@ -332,7 +332,10 @@ footer p {
     background-color:lightblue;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba
-  }  
+  }
+  .emission-container h1{
+    font-size: 25px;
+  } 
   .custom-shape-divider-bottom-1685446723 {
     position: absolute;
     bottom: 0;

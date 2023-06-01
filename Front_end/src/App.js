@@ -24,7 +24,6 @@ export default function App() {
                         <Route path="/home" component={ HomePage } />
                         <Route path="/data" component={ Emission } />
                     </Switch>
-                    
                 </div>
                
             </Router>
