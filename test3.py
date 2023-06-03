@@ -8,7 +8,6 @@ import numpy_financial as npf
 import math
 import sys 
 import json
-import ast
 
 target=sys.argv[1]
 dimensions=sys.argv[2]
@@ -17,14 +16,11 @@ Total_EM=sys.argv[4]
 Grid_EM=sys.argv[5]
 diesel_emission=sys.argv[6]
 Fuel_oil_EM=sys.argv[7]
-# print(sys.argv)
-#dimensions=ast.literal_eval(dimensions)
 target=int(target)
 Total_EM=float(Total_EM)
 Grid_EM=float(Grid_EM)
 diesel_emission=float(diesel_emission)
 Fuel_oil_EM=float(Fuel_oil_EM)
-#sys.stderr = sys.stdout
 values = dimensions.split(',')  # split string into array of values
 roof_sizes = []
 for i in range(0, len(values), 2):
@@ -69,7 +65,6 @@ for i in range(cols):
 
 EmReductionSolar1kW_df = EmReductionSolar1kW_df - EF["Solar"]
 
-
 year = 2021
 for i in range(365):
   date_object = dt.date(year, 1, 1) + dt.timedelta(i)
@@ -96,9 +91,6 @@ for i in roof_sizes:
 #---------------------------------------------------------------------
 max_DC_capacity = panel_sum * panel_cap/1000 #kW
 
-
-#print(type(results))
-#---------------------------------------------------------------------
 DoD = 0.8   #Recommended depth of discharge for Li-ion Batteries 
 eff = 0.95  #Efficiency of BESS 
 
@@ -182,8 +174,6 @@ PV_OM2 = list(df1.OM2)        # O&M cost for other years
 PV_R = list(df1.Rplacement)   # Inverter replacement cost
 PV_Tariff = 34.5/Rs_USD
 PV_GHG = EmReductionSolar1kW
-
-
 PV_cost = []
 PV_OM = []
 PV_sell_benefit = []
@@ -217,7 +207,6 @@ for j in range (21):
   CF = PV_benefit[j]-Sum_cost
   PV_CF.append(float(CF))
 
-
 # Define a function to call cashflows of BESS and Boiler systems 
 def Cashflows(filename):
 
@@ -239,10 +228,8 @@ def Cashflows(filename):
 
     return cost
 
-
 Bat_cost = Cashflows('BatterySystem')
 Boi_cost = Cashflows('BiomassBoiler')
-
 
 #######         Benefit and fuel cost of BESS system for 1kWh           ######
 #_____________________________________________________________________________
@@ -273,8 +260,6 @@ for k1 in range(21):
         Sum2 = 0.0127*((1 - Bat_Deg)**(k1-1))
         Bat_CO2_benefit.append(Sum2)
         
-
-
 #######       Benefit and fuel cost of Boiler system for 1kWh           ######
 #_____________________________________________________________________________
 
@@ -312,9 +297,6 @@ Annual_HVO_CF = ( Diesel_price * HVO_CV/diesel_CV - HVO_price) + (EF["Diesel"]*H
 Gen_CF = [Annual_HVO_CF]*20
 Gen_CF.insert(0,0)
 
-
-
-
 # NPV for 1kW PV system
 PV_npv = npf.npv(r, PV_CF)
 # NPV of O&M cost of PV system
@@ -330,7 +312,6 @@ Boi_cost_npv = npf.npv(r, Boi_cost)
 Boi_benefit_npv = npf.npv(r, Boi_benefit)
 # NPV of replacing diesel oil from HVO fuel
 DG_npv = npf.npv(r, Gen_CF)
-
 
 Steam_kg_TO_kwh = 0.7147
 
@@ -355,57 +336,7 @@ def objective(x):
   NPV = SolarPV_NPV + BESS_cost + DG_npv * x[2] + Boiler_NPV 
 
   return -NPV
-#############front end#####################
 
-# print("\n\n--- Minimum system requirements for maximum emission reduction ---\n")
-# print("PV System: ")
-# print("Solar panel specification\n  Brand: JA Solar\n  Type: JAM72S30-550/MR/1500V \n  Dimensions: 2279mm X 1134mm\n  Rated Maximum Power: 550W")   
-# print("  Datasheet: https://www.eeusolar.com/pdf/JAM72S30-525-550-MR.pdf")   
-
-#####################fe#########################
-# print("No. of panels = %i" %(panel_sum))
-# print("DC capacity for Solar PV = %.2f kW" % max_DC_capacity)
-# print("\n")
-
-
-
-###################fe#################
-
-# print("Battery Energy Storage System:")
-# print("Battery specification:")
-# print("  Brand:Mastervolt")
-# print("  Type: MLI Ultra 12/1250")   #Dimensions: 2279mm X 1134mm\n  Rated Maximum Power Power: 550W")  ")
-# print("  Dimensions: 330mm x 173mm x 210mm")
-# print("  Nominal Battery Voltage: 12V")
-# print("  Nominal Battery Capacity: 100Ah")
-# print("  Datasheet: https://www.mastervolt.com/products/li-ion/mli-ultra-12-1250/pdf/") 
-##########################################
-# print("Recommended Depth of Discharge = %.1f" % DoD)
-# print("Battery Capacity = %.2f kWh" % Req_battery_cap)#######kwh to fe###
-#print("Minimum Power Rating = %.2f kW" %max_power)
-
-#########################fe#########################
-# print("\n")
-
-# print("Diesel Generator Fuel:")
-# print("Recommended Low Carbon Technology: Full replacement of Diesel by Green Diesel (HVO)")
-#############################################
-# print("Annual Green Diesel Fuel Capacity = %.2f l" % Annual_HVO_req)
-# print("\n")
-################################fe############################3
-# print("Steam Boiler:")
-# print("Recommended Low Carbon Technology: Full replacement of oil boiler by biomass boiler ")
-#######################################
-# print("Biomass Boiler Size = %.2f steam kg/h" %Biomass_Boi_size)
-# print("\n")
-
-# Maximum emission reduction from each alternative
-# Solar_EM_Red = EmReductionSolar1kW * max_DC_capacity
-# BESS_EM_Red = - BatteryEM
-# GreenDiesel_EM_Red = diesel_emission - HVO_emission
-# Biomass_EM_Red = Fuel_oil_EM - Biomass_EM
-
-#print("\n")
 # Cost analysis for maximum emission reduction
 x0 = [max_DC_capacity, 0, 0, 0]
 x1 = [0, Req_battery_cap, 0, 0]
@@ -422,8 +353,6 @@ def constraint1(x):
   #Battery supply daily consumption for the discharging interval, to a max of its dischargable capacity
 
   BatteryEM = ((EF_ch/eff - EF_dis).multiply(Battery_consump)).sum()  #negative -> emission reduction
-
-
   #__________________________________________________________________________
  #For Biomass boiler
 
@@ -435,7 +364,6 @@ def constraint1(x):
 
   BoilerEM_red = (EF["Fuel oil"]/eff_oil - EF["Wood"]*3.6/Cal_wood / eff_bio) * Annual_Biomass_steam_supply
  
-  
   #__________________________________________________________________________
  
 
@@ -475,7 +403,6 @@ Voc_panel = 49.9              #open circuit voltage
 Vmp_panel = 41.96             #Maximum power voltage
 Coef_T_Voc = -0.00275         #Temperature coeffient of Voc
 Coef_T_Pmp = -0.0035          #Temperature coeffient of Pmp
-
 
 #Select inverter type as Huawei SUN2000
 #SUN2000 60kW
@@ -534,8 +461,6 @@ def stringsizing(Inv_type):
 
       return N_max, N_min
 
-
-
 #BESS
 Battery_Cap = 100 #Ah
 Battery_Volt = 12 #V
@@ -549,53 +474,11 @@ else:
   Series_con = default_sys_voltage/Battery_Volt
 Parallel_con = math.ceil(BESS_size*1000/(default_sys_voltage*Battery_Cap)) #math ceil
 
-
-
-# show final objective
-#############fe####################
-# print("\n-- Suggested sytem for desired emission reduction --")
-###########################3
-# print("DC capacity for Solar PV = %.2f kW" % x[0])
-# print("Battery Capacity: %.2f kWh" % (x[1]/DoD/eff) )
-# print("Annual HVO fuel requirement: %.2f l" % x[2])
-# print("Biomass Boiler Capacity: %.2f steam kg/h" % x[3])
-
-#System sizes
-
-# SOLAR SYSTEM SIZING################fe#######
-#print("Solar system Sizing:")
-
-#######################
 N_panel,P_PV,N_100kW,N_60kW = PVsizing(x[0])
-# print('PV system capacity: ',P_PV)
-# print('PV system generated energy: ',P_PV*Annual_gen)
-# print('No. of solar panel: ',N_panel)
-# print('No. of 100kW inverters: ',N_100kW)
-# print('No. of 60kW inverters: ',N_60kW)
-
 N_max, N_min = stringsizing(100)
-# print('Maximum number of panel for a string: ',N_max)
-# print('Minimum number of panel for a string: ',N_min)
-# print("\n")
 
 #--Bess
 practical_BESS_size = (Battery_Volt * Series_con) * (Battery_Cap * Parallel_con)
-
-#####################fe#####
-#print("BESS Sizing:")
-##########################################
-# print("  BESS Voltage = %i" % default_sys_voltage)
-# print("  No of batteries in Series per string = %i" %Series_con)
-# print("  No of strings in parallel = %i" %Parallel_con)
-# print("  Battery Bank Capacity = %.2f Ah" %(practical_BESS_size/default_sys_voltage))
-
-######################fe#################3
-#print("\n-- For suggested system --")
-######################################
-# print('NPV: $%.2f ' %(-objective(x)))
-# print("New Emission: %.2f kgCO2e" % -(constraint1(x)-EmTarget))   #determined according to constraint function output
-# print("\n")
-
 
 Battery_consump = (Consump_dis.apply(lambda i:x[1] if x[1] < i else i))   #Battery energy usage for each day * 365
 BatteryEM = (-(EF_ch/eff - EF_dis).multiply(Battery_consump)).sum()       #Annual emission
@@ -704,11 +587,6 @@ for m in range (21):
 Cap_cost_arrays = np.array([PVf_cost, Batf_cost, Boif_cost])
 SYS_Capcost = np.sum(Cap_cost_arrays[:,0])
 
-# print('Capital cost of the overall energy system: $ %.2f ' %SYS_Capcost)
-# print('IRR of the overall energy system: %.2f' %(irr*100))
-# print('NPV of the overall energy system: $ %.2f ' %npv)
-# print("Payback Period of the overall energy system: %i Y" %PPB)
-
 Ea = (constraint1([x[0],0,0,0]) - EmTarget + Total_EM)  
 Eb = (constraint1([0,x[1],0,0]) - EmTarget + Total_EM) 
 Ec = (constraint1([0,0,x[2],0]) - EmTarget + Total_EM) 
@@ -723,18 +601,8 @@ E_Boi = Fuel_oil_EM - (constraint1([0,0,0,x[3]]) - EmTarget + Total_EM)
 E_Total = Total_EM - (constraint1([x[0],x[1],x[2],x[3]]) - EmTarget + Total_EM)
 
 results = {
-    # "district": dis,
-    # "target": target,
-    # "max_DC_capacity": max_DC_capacity,
-    # "No_of_panels":panel_sum,
     "DC_capacityforsolar":round(max_DC_capacity,2),
-    # "Depth_of_discharge":DoD,
-    # "Battery_Capacity":Req_battery_cap,
-    # "Annual_Green_Diesel_Fuel_Capacity":round(Annual_HVO_req,2),
-    # "Biomass_Boiler_Size":round(Biomass_Boi_size,2),
-    # "DC_capacity_for_Solar_PV":x[0],
     "Battery_Capacity":round(x[1]/DoD/eff,2),
-    # "Battery_Capacity":DoD/eff,
     "Annual_HVO_fuel_requirement":round(x[2],2),
     "Biomass_Boiler_Capacity":round(x[3],2),
     "PV_system_capacity":round(P_PV,2),

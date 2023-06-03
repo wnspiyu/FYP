@@ -18,7 +18,6 @@ export default function SignInPage() {
                             <label>Password</label>
                             <input type="password" name="password" required style={{ width: "40%",padding:"5px" }}/>
                             <Link to="/forget-password"><label className="left-label">Forget password?</label></Link>
-                            {/* <br /> */}
                         </p>
                         <p>
                         <center><button id="sub_btn" type="submit"style={{ width: "200px" }}>Login</button></center>

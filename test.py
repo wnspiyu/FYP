@@ -32,14 +32,7 @@ def calculate_onsite_emission(file1path, file2path,file3path,buildings,dimension
         # Read input files
     GridEF_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Marginal Emission Factors.xlsx")
     Elec_df = pd.read_excel(file1path)
-    # dis = district.strip()
-    # dis = district.capitalize()
-
     Solar1kWp_df = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\Monthly district solar average for 1kWp in kWh.xlsx",sheet_name = district)
-
-    # df1 = pd.read_excel(r"C:\Users\wnspi\OneDrive\Desktop\myNode\FYP\files\LevelizeCost.xlsx",sheet_name= 'PVsystem')
-
-    
     Steam_demand = pd.read_excel(file2path)
     Diesel_cosumption_df = pd.read_excel(file3path)
 
@@ -90,7 +83,7 @@ def calculate_onsite_emission(file1path, file2path,file3path,buildings,dimension
     Grid_EM_df = New_GridEF_df.multiply(New_Elec_df) #quater hourly emission in kgCO2e
 
     Grid_EM = Grid_EM_df.sum().sum() #Total Grid emission for the year
-
+    
 
     diesel_consump = Diesel_cosumption_df.iloc[:12,1].sum()
     # Req_battery_cap = (Consump_dis.max())/DoD/eff 
@@ -139,7 +132,6 @@ def calculate_onsite_emission(file1path, file2path,file3path,buildings,dimension
     max_power = New_Elec_df.iloc[:,m2:n2].max().max()
     BatteryEM = ((EF_ch/eff - EF_dis).multiply(Consump_dis)).sum()
 
-    
     Solar_EM_Red = EmReductionSolar1kW * max_DC_capacity
     BESS_EM_Red = - BatteryEM
     GreenDiesel_EM_Red = diesel_emission - HVO_emission
@@ -148,7 +140,6 @@ def calculate_onsite_emission(file1path, file2path,file3path,buildings,dimension
     Total_EM = Grid_EM + diesel_emission + Fuel_oil_EM
     Total_max_EM_Red=Solar_EM_Red+BESS_EM_Red+GreenDiesel_EM_Red+Biomass_EM_Red
     Remaining=Total_EM-Total_max_EM_Red
-    #return Grid_EM,diesel_emission,Fuel_oil_EM,Total_EM
     buildings=int(buildings)
     district=district
 

@@ -6,6 +6,7 @@ const slideStyles = {
   borderRadius: "10px",
   backgroundSize: "cover",
   backgroundPosition: "center",
+  border: "2px solid blue",
 };
 
 const rightArrowStyles = {
@@ -77,6 +78,7 @@ const ImageSlider = ({ slides, parentWidth }) => {
     ...slideStyles,
     backgroundImage: `url(${slides[slideIndex].url})`,
     width: `${parentWidth}px`,
+    position: "relative",
   });
   const getSlidesContainerStylesWithWidth = () => ({
     ...slidesContainerStyles,
@@ -110,8 +112,9 @@ const ImageSlider = ({ slides, parentWidth }) => {
           {slides.map((_, slideIndex) => (
             <div
               key={slideIndex}
-              style={getSlideStylesWithBackground(slideIndex)}
-            ></div>
+              style={getSlideStylesWithBackground(slideIndex)}>
+                <div className="slide-text">{slides[slideIndex].text}</div>
+            </div>
           ))}
         </div>
       </div>

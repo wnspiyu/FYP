@@ -4,19 +4,6 @@ import { Fade, Slide } from "react-reveal";
 class Contact extends Component {
   render() {
     if (!this.props.data) return null;
-
-    // const name = this.props.data.name;
-    // const street = this.props.data.address.street;
-    // const city = this.props.data.address.city;
-    // const state = this.props.data.address.state;
-    // const zip = this.props.data.address.zip;
-    // const head1 = this.props.data.head1;
-    // const head2 = this.props.data.head2;
-    // const head3 = this.props.data.head3;
-    // const memb1 = this.props.data.memb1;
-    // const memb2 = this.props.data.memb2;
-    // const memb3 = this.props.data.memb3;
-    // const phone = this.props.data.hhone;
     const message = this.props.data.contactmessage;
 
     return (
@@ -110,19 +97,6 @@ class Contact extends Component {
 
           <Slide right duration={1000}>
             <aside className="four columns footer-widgets">
-              {/* <div className="widget widget_contact">
-                <h4>Our Technical Team</h4>
-                <p className="address">
-                  {head1}<br />
-                  {head2}<br />
-                  {head3}<br />
-                  {memb1}<br />
-                  {memb2}<br />
-                  {memb3}<br />
-                  <span>{phone}</span>
-                </p>
-              </div> */}
-
               <div className="widget widget_tweets">
                 <h4 className="widget-title">Our Technical Team</h4>
                 <ul id="twitter">
@@ -137,20 +111,7 @@ class Contact extends Component {
                         <li>R.P.A.C.M. Rajapaksha</li>
                       </ul>
                     </span>
-                    
                   </li>
-                  {/* <li>
-                    <span>
-                      Sed ut perspiciatis unde omnis iste natus error sit
-                      voluptatem accusantium doloremque laudantium, totam rem
-                      aperiam, eaque ipsa quae ab illo inventore veritatis et
-                      quasi
-                      <a href="./">http://t.co/CGIrdxIlI3</a>
-                    </span>
-                    <b>
-                      <a href="./">3 Days Ago</a>
-                    </b>
-                  </li> */}
                 </ul>
               </div>
             </aside>

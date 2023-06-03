@@ -4,8 +4,6 @@ import Fade from "react-reveal";
 class About extends Component {
   render() {
     if (!this.props.data) return null;
-
-    const name = this.props.data.name;
     const profilepic = "images/" + this.props.data.image;
     const step1 = this.props.data.step1;
     const step2 = this.props.data.step2;
@@ -13,13 +11,6 @@ class About extends Component {
     const step4 = this.props.data.step4;
     const step5 = this.props.data.step5;
     const bio = this.props.data.bio;
-    // const street = this.props.data.address.street;
-    // const city = this.props.data.address.city;
-    // const state = this.props.data.address.state;
-    // const zip = this.props.data.address.zip;
-    // const phone = this.props.data.phone;
-    // const email = this.props.data.email;
-    // const resumeDownload = this.props.data.resumedownload;
     const electricity_templete=this.props.data.electricity_templete;
     const boiler_templete=this.props.data.boiler_templete;
     const diesel_templete=this.props.data.diesel_templete;
